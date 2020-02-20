@@ -1,71 +1,67 @@
-//--------------------------------------Objeto Carrito ---------------------------------------------
-window.onload = function(){
 class Cart {
     constructor(date, number) {
         this.date = date;
         this.number = number;
-        this.products = new Array();
+        this.products = []
     }
 
     addProduct(event) {
-        let data = event.srcElement.name.split("|");
+        let data = event.name.split("|");
 
         let product = new Product(data[0], data[1], data[2])
-
         let selectedProduct = this.products.find(p => p.id == product.id)
 
-        if (selectedProduct) { this.products.push(product) }
-        else { selectedProduct.quantity++ }
-
+        if (!selectedProduct) { this.products.push(product) } else { selectedProduct.quantity++ }
     }
 
     printCart() {
-        console.log(this.products)
         let total = 0;
-        let html = `            <table>
+        let html = ""
+
+        html += `
+            <table>
             <tr>
             <th>Codigo</th><th>Descripción</th><th>Precio</th><th>Unidades</th>
-            </tr>
-        
-            ${this.products.forEach(function (product) {
-            `<tr>
-            <td>${product.codigo}</td>
-            <td> ${product.descripcion}</td>
-            <td>${product.precio}</td>
-            <td>${product.unidades}</td>
-            ${ total += product.precio * product.unidad}
-        </tr>`
+            </tr>`
+        this.products.forEach(function(product) {
+            html += `<tr>
+            <td>${product.id}</td>
+            <td> ${product.desc}</td>
+            <td>${product.price}</td>
+            <td>${product.quantity}</td>
+        </tr>`;
+            total += product.price * product.quantity
         })
-            }
-            <h3>Total ${total}</h3>
 
-            `
-        document.getElementById("listaCarrito").appendChild(html)
+        html += `<h3>Total ${total}</h3>`
+
+        document.getElementById("listaCarrito").innerHTML = html
     }
 }
 
-		//--------------------------------------Objeto Articulo ---------------------------------------------
+class Product {
 
-    class Product {
-
-        constructor(codigo,	descripción, precio){
-            this.codigo = codigo
-            this.descripción = descripción
-            this.precio = precio
-            this.unidades = 1
-        }
-
+    constructor(id, desc, price) {
+        this.id = id
+        this.desc = desc
+        this.price = price
+        this.quantity = 1
     }
 
-		//--------------------- Funciones para asociar al hacer click en las fotos y al hacer click en 'Ver Carrito'
+}
+window.onload = function() {
 
+    let cart = new Cart("24/07/2020", 1)
+    let img = document.getElementsByClassName("images");
+    let imgS = document.img[0].childNodes;
+    console.log(imgS)
+    let imagenes = document.getElementsByTagName("img")
 
+    Array.from(imagenes).map(img => img.addEventListener("click", function() {
+        cart.addProduct(this)
+    }));
 
-            let cart = new Cart("24/07/2020", 1)
-            console.log(cart)
-            let imagenes = document.getElementsByTagName("img")
-
-            Array.from(imagenes).map(img => img.addEventListener("click", cart.addProduct));
-
-            document.getElementById("boton")  
-        }
+    document.getElementById("boton").addEventListener("click", function() {
+        cart.printCart()
+    });
+}
