@@ -1,0 +1,133 @@
+<html>
+
+<head>
+	<style>
+		.imagencss {
+			position: absolute;
+			top: 150px;
+			left: 400px
+		}
+	</style>
+
+	<script>
+
+		pizzas = [{
+			'codigo': 'P0',
+			'nombre': '--- Selecciona una Pizza ---',
+			'ingredientes': []
+		},
+		{
+			'codigo': 'P1',
+			'nombre': 'Prosciutto',
+			'ingredientes': [{ 'ingrediente': 'salsa de tomate', 'precio': '0.5' },
+			{ 'ingrediente': 'mozzarella', 'precio': '0.5' },
+			{ 'ingrediente': 'jamón york', 'precio': '0.75' }
+			]
+		},
+		{
+			'codigo': 'P2',
+			'nombre': 'Capricciosa',
+			'ingredientes': [{ 'ingrediente': 'salsa de tomate', 'precio': '0.5' },
+			{ 'ingrediente': 'mozzarella', 'precio': '0.5' },
+			{ 'ingrediente': 'jamón york', 'precio': '0.75' },
+			{ 'ingrediente': 'alcachofas', 'precio': '1' },
+			{ 'ingrediente': 'champiñones', 'precio': '0.5' },
+			{ 'ingrediente': 'olivas negras', 'precio': '0.25' }
+			]
+		},
+		{
+			'codigo': 'P3',
+			'nombre': 'Cuatro Formaggi',
+			'ingredientes': [{ 'ingrediente': 'salsa de tomate', 'precio': '0.5' },
+			{ 'ingrediente': 'mozzarella', 'precio': '0.5' },
+			{ 'ingrediente': 'gorgonzola', 'precio': '1.25' },
+			{ 'ingrediente': 'emmemtal', 'precio': '1' },
+			{ 'ingrediente': 'brie', 'precio': '0.75' }
+			]
+		}
+		];
+
+		window.onload = function(){
+			let lista = document.getElementById("lista");
+			rellenarLista();
+			cargarImporte(0);
+			lista.addEventListener("change", cargarPizza);
+		};
+
+		function rellenarLista() {
+			let parent = document.getElementById("lista");
+			pizzas.forEach(pizza => {
+				let element = document.createElement("option");
+				element.value = pizza.codigo;
+				element.textContent = pizza.nombre;
+				parent.appendChild(element);
+			});
+		}
+
+		function cargarPizza() {
+			let lista = document.getElementById("lista");
+			let fotopizza = document.getElementById("fotopizza");
+			let ingredientes = document.getElementById("ingredientes");
+
+			if (lista.value == "P0") {
+				cargarImporte(0);
+				fotopizza.innerHTML = "";
+				ingredientes.innerHTML = "";
+			} else {
+				fotopizza.innerHTML = "";
+				let pizzaSeleccionada;
+				pizzas.forEach(pizza => {
+					if (lista.value == pizza.codigo) {
+						pizzaSeleccionada = pizza;
+					}
+				});
+				fotopizza.innerHTML = "";
+				fotopizza.appendChild(cargarImagen(pizzaSeleccionada));
+				ingredientes.innerHTML = "";
+				ingredientes.innerHTML = cargarIngredientes(pizzaSeleccionada);
+			}
+
+		}
+
+		function cargarImagen(pizza) {
+			let imagen = document.createElement("img");
+			imagen.src = pizza.codigo + ".jpg";
+			imagen.className = "imagencss";
+			return imagen;
+		}
+
+		function cargarIngredientes(pizza) {
+			let ingredientes = "";
+			let importeTotal = 5;
+			pizza.ingredientes.forEach(ingrediente => {
+				ingredientes += ingrediente.ingrediente + "<br>";
+				importeTotal += parseFloat(ingrediente.precio);
+			});
+			cargarImporte(importeTotal);
+			return ingredientes;
+		}
+
+		function cargarImporte(importeTotal){
+			let importe = document.getElementById("importe");
+			importe.innerHTML = "Importe : " + importeTotal;
+		}
+
+	</script>
+</head>
+
+<body>
+	<br>
+	<select id="lista">
+	</select>
+
+	<div id="fotopizza">
+
+	</div>
+	<h3>Ingredientes:</h3>
+	<div id="ingredientes">
+
+	</div>
+	<h2 id="importe">Importe :</h2>
+</body>
+
+</html>

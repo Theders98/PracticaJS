@@ -19,21 +19,22 @@ class Cart {
         let html = ""
 
         html += `
-            <table>
+            <table class="table">
             <tr>
             <th>Codigo</th><th>Descripción</th><th>Precio</th><th>Unidades</th>
             </tr>`
         this.products.forEach(function(product) {
             html += `<tr>
             <td>${product.id}</td>
-            <td> ${product.desc}</td>
-            <td>${product.price}</td>
+            <td>${product.desc}</td>
+            <td>${product.price}€</td>
             <td>${product.quantity}</td>
-        </tr>`;
+        </tr>
+        `;
             total += product.price * product.quantity
         })
 
-        html += `<h3>Total ${total}</h3>`
+        html += `</table><h3>Total ${total}€</h3>`
 
         document.getElementById("listaCarrito").innerHTML = html
     }
@@ -52,16 +53,19 @@ class Product {
 window.onload = function() {
 
     let cart = new Cart("24/07/2020", 1)
-    let img = document.getElementsByClassName("images");
-    let imgS = document.img[0].childNodes;
-    console.log(imgS)
-    let imagenes = document.getElementsByTagName("img")
+    let img = document.getElementsByClassName("images")[0].childNodes;
+    console.log(img)
 
-    Array.from(imagenes).map(img => img.addEventListener("click", function() {
+
+    let imagenes = document.getElementsByTagName("img")
+    console.log(imagenes)
+    Array.from(img).map(img => img.addEventListener("click", function() {
         cart.addProduct(this)
+        cart.printCart()
     }));
 
     document.getElementById("boton").addEventListener("click", function() {
         cart.printCart()
+
     });
 }
